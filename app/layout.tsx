@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Chatter',
+  title: 'chitgem',
   description: 'AI chatbot',
 }
 
