@@ -1,7 +1,7 @@
 "use client"
 import { FC } from "react"
 import { GPTLogo, HamburgerIcon, EditIcon } from "@/components/icons"
-import { Search, Archive, PlayCircle, LayoutGrid } from "lucide-react"
+import { Search, Archive, PlayCircle, LayoutGrid, PencilLine, Trash2 } from "lucide-react"
 import { SidebarUserSection } from "./SidebarUserSection"
 
 interface Chat {
@@ -16,6 +16,8 @@ interface Props {
     activeChatId?: string
     setActiveChatId?: (id: string) => void
     handleNewChat?: () => void
+    handleRenameChat?: (id: string) => void
+    handleDeleteChat?: (id: string) => void
 }
 
 export const Sidebar: FC<Props> = ({
@@ -24,7 +26,9 @@ export const Sidebar: FC<Props> = ({
     chats = [],
     activeChatId,
     setActiveChatId,
-    handleNewChat
+    handleNewChat,
+    handleRenameChat,
+    handleDeleteChat
 }) => {
     const navItems = [
         { icon: <EditIcon className="w-5 h-5" />, text: "New chat", onClick: handleNewChat },
@@ -72,13 +76,33 @@ export const Sidebar: FC<Props> = ({
                         </p>
                         <div className="flex flex-col space-y-1">
                             {chats.map((chat) => (
-                                <button
+                                <div
                                     key={chat._id}
-                                    onClick={() => setActiveChatId?.(chat._id)}
-                                    className={`flex items-center p-2 rounded-md hover:bg-zinc-700 text-sm text-zinc-200 truncate ${activeChatId === chat._id ? "bg-zinc-700" : ""}`}
+                                    className={`group flex items-center gap-2 p-2 rounded-md text-sm text-zinc-200 ${activeChatId === chat._id ? "bg-zinc-700" : "hover:bg-zinc-700"}`}
                                 >
-                                    {chat.title}
-                                </button>
+                                    <button
+                                        onClick={() => setActiveChatId?.(chat._id)}
+                                        className="flex-1 text-left truncate"
+                                    >
+                                        {chat.title}
+                                    </button>
+                                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button
+                                            onClick={() => handleRenameChat?.(chat._id)}
+                                            className="p-1 rounded hover:bg-zinc-600"
+                                            title="Rename chat"
+                                        >
+                                            <PencilLine size={14} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteChat?.(chat._id)}
+                                            className="p-1 rounded hover:bg-red-500/20 text-red-400"
+                                            title="Delete chat"
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     </div>
