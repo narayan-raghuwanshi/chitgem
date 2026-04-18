@@ -30,7 +30,7 @@ export const InputArea: FC<Props> = ({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Message ChatGPT..."
+                placeholder="Message ChitGem..."
                 className="flex-grow bg-transparent text-white placeholder-zinc-400 focus:outline-none resize-none max-h-48 mx-3"
                 rows={1}
                 disabled={isWaitingForResponse}
@@ -50,7 +50,7 @@ export const InputArea: FC<Props> = ({
             </button>
         </div>
         <p className="text-xs text-zinc-400 text-center mt-2 px-4">
-            ChatGPT can make mistakes. Consider checking important information.
+            ChitGem can make mistakes. Consider checking important information.
         </p>
     </div>
 )

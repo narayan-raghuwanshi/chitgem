@@ -33,9 +33,7 @@ export const Sidebar: FC<Props> = ({
     const navItems = [
         { icon: <EditIcon className="w-5 h-5" />, text: "New chat", onClick: handleNewChat },
         { icon: <Search size={20} />, text: "Search chats" },
-        { icon: <Archive size={20} />, text: "Library" },
-        { icon: <PlayCircle size={20} />, text: "Sora" },
-        { icon: <LayoutGrid size={20} />, text: "GPTs" },
+        { icon: <Archive size={20} />, text: "Library" }
     ]
 
     return (
