@@ -10,6 +10,8 @@ interface ChatMessageProps {
     isLast?: boolean
 }
 
+import { CodeBlock } from "./CodeBlock"
+
 export const ChatMessage: FC<ChatMessageProps> = ({ message, isLast }) => {
     const { role, content } = message
     const isAssistant = role === "assistant"
@@ -59,31 +61,24 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message, isLast }) => {
     )
 }
 
-type MarkdownCodeProps = HTMLAttributes<HTMLElement> & {
-    inline?: boolean
-}
-
-const CodeRenderer = ({ inline, className, children, ...props }: MarkdownCodeProps) => (
-    <code
-        {...props}
-        className={
-            inline
-                ? "px-1.5 py-0.5 rounded bg-black/5 text-[0.9em] font-mono"
-                : className
-        }
-    >
-        {children}
-    </code>
-)
-
 const markdownComponents: Components = {
-    pre: ({ node: _node, ...props }) => (
-        <pre
-            {...props}
-            className="overflow-x-auto bg-black/5 border border-black/10 rounded-xl p-4 text-sm font-mono my-4 shadow-inner"
-        />
-    ),
-    code: CodeRenderer,
+    pre: ({ children }) => <>{children}</>,
+    code: ({ node: _node, className, children, ...props }) => {
+        const match = /language-(\w+)/.exec(className || "")
+        return match ? (
+            <CodeBlock
+                language={match[1]}
+                value={String(children).replace(/\n$/, "")}
+            />
+        ) : (
+            <code
+                {...props}
+                className="px-1.5 py-0.5 rounded bg-black/5 text-[0.9em] font-mono"
+            >
+                {children}
+            </code>
+        )
+    },
     ul: ({ node: _node, ...props }) => <ul {...props} className="list-disc ml-5 space-y-2 my-2" />,
     ol: ({ node: _node, ...props }) => <ol {...props} className="list-decimal ml-5 space-y-2 my-2" />,
     table: ({ node: _node, ...props }) => (
