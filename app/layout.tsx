@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'chitgem',
-  description: 'AI chatbot',
+  title: 'Stroke | Aesthetic Consultant',
+  description: 'A professional Color & Aesthetic Consultant for refined visual brilliance.',
 }
 
 export default function RootLayout({

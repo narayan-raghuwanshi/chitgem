@@ -2,7 +2,7 @@
 import { FC } from "react"
 import Image from "next/image"
 import { HamburgerIcon, EditIcon } from "@/components/icons"
-import { Search, Archive, PencilLine, Trash2, MessageCircleIcon, MoreVertical } from "lucide-react"
+import { Search, Archive, PencilLine, Trash2, MessageCircleIcon, MoreVertical, Paintbrush } from "lucide-react"
 import { SidebarUserSection } from "./SidebarUserSection"
 import { useState, useRef, useEffect } from "react"
 
@@ -78,9 +78,11 @@ export const Sidebar: FC<Props> = ({
                 {/* Header */}
                 <div className={`p-2 h-[72px] flex items-center ${isSidebarOpen ? "justify-between" : "justify-center"}`}>
                     {(isSidebarOpen || !isSidebarOpen) && (
-                        <div className={`flex items-center gap-2 ${!isSidebarOpen && "hidden md:flex"}`}>
-                            {isSidebarOpen && <Image src="/logo.png" alt="Logo" width={32} height={32} className="contrast-125" />}
-                            {isSidebarOpen && <span className="font-bold tracking-tight">chitgem</span>}
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-lg">
+                                <Paintbrush size={18} className="text-primary-foreground" />
+                            </div>
+                            {isSidebarOpen && <span className="font-bold tracking-tight text-xl">Stroke</span>}
                         </div>
                     )}
                     <button

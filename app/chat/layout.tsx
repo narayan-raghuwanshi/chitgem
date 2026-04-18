@@ -127,7 +127,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                     </button>
                     <div className="flex items-center gap-2 overflow-hidden">
                         <h1 className="text-lg md:text-xl flex gap-1 items-center font-bold truncate">
-                            {activeChat?.title ?? "chitgem"} <ChevronDown size={18} className="text-muted-foreground" />
+                            {activeChat?.title ?? "Stroke"} <ChevronDown size={18} className="text-muted-foreground" />
                         </h1>
                     </div>
                 </header>

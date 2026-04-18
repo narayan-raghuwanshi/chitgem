@@ -52,7 +52,7 @@ export default function HomePage() {
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center text-center px-4">
-      <h2 className="text-3xl text-foreground font-semibold mb-8">What&apos;s on your mind today?</h2>
+      <h2 className="text-3xl text-foreground font-semibold mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">What are we designing today?</h2>
       <InputArea
         input={input}
         setInput={setInput}

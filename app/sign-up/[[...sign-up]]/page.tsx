@@ -1,5 +1,5 @@
 import { SignUp } from '@clerk/nextjs'
-import Image from 'next/image'
+import { Paintbrush } from 'lucide-react'
 
 export default function Page() {
     return (
@@ -11,23 +11,25 @@ export default function Page() {
 
                 <div className='relative z-10'>
                     <div className='flex items-center gap-3 mb-6 md:mb-8 animate-in fade-in slide-in-from-left-4 duration-700'>
-                        <Image src="/logo.png" alt="Logo" width={40} height={40} className="md:w-12 md:h-12 contrast-125 saturate-150" />
-                        <h1 className='text-3xl md:text-4xl font-bold tracking-tight text-foreground'>chitgem</h1>
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary flex items-center justify-center shadow-lg">
+                            <Paintbrush size={24} className="text-primary-foreground leading-none" />
+                        </div>
+                        <h1 className='text-3xl md:text-4xl font-bold tracking-tight text-foreground'>Stroke</h1>
                     </div>
 
                     <h2 className='text-3xl md:text-5xl lg:text-6xl font-extrabold text-foreground mb-4 md:mb-6 leading-tight animate-in fade-in slide-in-from-left-4 duration-700 delay-100'>
-                        Join the <span className='text-primary decoration-primary/20 decoration-8 underline-offset-8'>Elite</span> Dialogue.
+                        A New <span className='text-primary decoration-primary/20 decoration-8 underline-offset-8'>Vision</span> Awaits.
                     </h2>
 
                     <p className='text-lg md:text-xl text-muted-foreground mb-8 md:mb-12 max-w-lg leading-relaxed animate-in fade-in slide-in-from-left-4 duration-700 delay-200'>
-                        Create your account and unlock an AI experience that&apos;s refined, powerful, and tailored to your professional needs.
+                        Secure your spot in the elite design circle on <span className="font-bold text-primary italic">stroke.slashme.io</span>. Experience aesthetic guidance that defines the future.
                     </p>
 
                     <div className='space-y-4 md:space-y-6 animate-in fade-in slide-in-from-left-4 duration-700 delay-300'>
                         {[
-                            { title: "Refined Intelligence", desc: "Sophisticated AI that understands nuance and context." },
-                            { title: "Premium Tools", desc: "Unlock features designed for high-performance workflows." },
-                            { title: "Privacy First", desc: "Your conversations are precious gems, kept safe and secure." }
+                            { title: "Refined Intelligence", desc: "Sophisticated AI that understands aesthetic nuance and balance." },
+                            { title: "Professional Tools", desc: "Unlock features designed for high-performance visual workflows." },
+                            { title: "Curated Excellence", desc: "Your designs are precious; we provide the stroke of genius they deserve." }
                         ].map((item, i) => (
                             <div key={i} className='flex gap-3 md:gap-4 items-start group'>
                                 <div className='mt-1 w-2 h-2 rounded-full bg-primary/40 group-hover:bg-primary transition-colors duration-300'></div>

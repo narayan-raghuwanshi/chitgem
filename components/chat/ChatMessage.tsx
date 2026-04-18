@@ -11,6 +11,10 @@ interface ChatMessageProps {
 }
 
 import { CodeBlock } from "./CodeBlock"
+import { PaletteBlock } from "./PaletteBlock"
+import { DesignCard } from "./DesignCard"
+import { DesignPreview } from "./DesignPreview"
+
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message, isLast }) => {
     const { role, content } = message
@@ -65,10 +69,39 @@ const markdownComponents: Components = {
     pre: ({ children }) => <>{children}</>,
     code: ({ node: _node, className, children, ...props }) => {
         const match = /language-(\w+)/.exec(className || "")
+        let language = match ? match[1].toLowerCase().trim() : ""
+        let content = String(children).replace(/\n$/, "")
+
+        // Fallback: detect language from content if parser missed it
+        if (!language || language === "text") {
+            if (content.startsWith("palette ")) {
+                language = "palette"
+                content = content.replace(/^palette\s+/, "")
+            } else if (content.startsWith("tip ")) {
+                language = "tip"
+                content = content.replace(/^tip\s+/, "")
+            } else if (content.startsWith("preview ")) {
+                language = "preview"
+                content = content.replace(/^preview\s+/, "")
+            }
+        }
+
+        if (language === "palette") {
+            return <PaletteBlock value={content} />
+        }
+
+        if (language === "tip") {
+            return <DesignCard value={content} />
+        }
+
+        if (language === "preview") {
+            return <DesignPreview value={content} />
+        }
+
         return match ? (
             <CodeBlock
-                language={match[1]}
-                value={String(children).replace(/\n$/, "")}
+                language={language}
+                value={content}
             />
         ) : (
             <code

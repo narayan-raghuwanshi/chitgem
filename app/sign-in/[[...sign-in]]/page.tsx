@@ -1,5 +1,6 @@
 import { SignIn } from '@clerk/nextjs'
 import Image from 'next/image'
+import { Paintbrush } from 'lucide-react'
 
 export default function Page() {
     return (
@@ -11,23 +12,25 @@ export default function Page() {
 
                 <div className='relative z-10'>
                     <div className='flex items-center gap-3 mb-6 md:mb-8 animate-in fade-in slide-in-from-left-4 duration-700'>
-                        <Image src="/logo.png" alt="Logo" width={40} height={40} className="md:w-12 md:h-12 contrast-125 saturate-150" />
-                        <h1 className='text-3xl md:text-4xl font-bold tracking-tight text-foreground'>Chitgem</h1>
+                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-primary flex items-center justify-center shadow-lg">
+                            <Paintbrush size={24} className="text-primary-foreground leading-none" />
+                        </div>
+                        <h1 className='text-3xl md:text-4xl font-bold tracking-tight text-foreground'>Stroke</h1>
                     </div>
 
                     <h2 className='text-3xl md:text-5xl lg:text-6xl font-extrabold text-foreground mb-4 md:mb-6 leading-tight animate-in fade-in slide-in-from-left-4 duration-700 delay-100'>
-                        Experience <span className='text-primary decoration-primary/20 decoration-8 underline-offset-8'>Conversations</span> That Shine.
+                        Master the <span className='text-primary decoration-primary/20 decoration-8 underline-offset-8'>Stroke</span> of Genius.
                     </h2>
 
                     <p className='text-lg md:text-xl text-muted-foreground mb-8 md:mb-12 max-w-lg leading-relaxed animate-in fade-in slide-in-from-left-4 duration-700 delay-200'>
-                        Elevate your dialogue with an AI that&apos;s as precise and brilliant as a gemstone. Designed for clarity, speed, and effortless productivity.
+                        A professional Color & Aesthetic Consultant for refined visual brilliance. Elevate your design vision on <span className="font-bold text-primary italic">stroke.slashme.io</span>.
                     </p>
 
                     <div className='space-y-4 md:space-y-6 animate-in fade-in slide-in-from-left-4 duration-700 delay-300'>
                         {[
-                            { title: "Crystal Clear AI", desc: "Intelligent responses with zero atmospheric clutter." },
-                            { title: "Earthy Aesthetics", desc: "A natural, comfortable interface designed for focused work." },
-                            { title: "Seamless Power", desc: "Built on high-performance infrastructure for instant results." }
+                            { title: "Expert Color Theory", desc: "Scientific approach to palettes that resonate and convert." },
+                            { title: "Aesthetic Harmony", desc: "Balance layouts and elements with professional precision." },
+                            { title: "Design Intelligence", desc: "Trained exclusively on high-end visual principles and modern trends." }
                         ].map((item, i) => (
                             <div key={i} className='flex gap-3 md:gap-4 items-start group'>
                                 <div className='mt-1 w-2 h-2 rounded-full bg-primary/40 group-hover:bg-primary transition-colors duration-300'></div>

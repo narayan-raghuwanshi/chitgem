@@ -30,7 +30,7 @@ export const InputArea: FC<Props> = ({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Message ChitGem..."
+                placeholder="Message Stroke..."
                 className="flex-grow bg-transparent text-foreground placeholder-muted-foreground focus:outline-none resize-none max-h-48 mx-3 text-sm"
                 rows={1}
                 disabled={isWaitingForResponse}
@@ -50,7 +50,7 @@ export const InputArea: FC<Props> = ({
             </button>
         </div>
         <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 text-center mt-3 px-4 font-bold">
-            ChitGem can make mistakes. Consider checking important information.
+            Stroke can make mistakes. Consider checking important information.
         </p>
     </div>
 )
