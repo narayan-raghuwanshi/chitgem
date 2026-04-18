@@ -4,8 +4,6 @@ import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { InputArea } from "@/components/chat/InputArea"
 import { Message } from "@/types/message"
-import { chat } from "@/actions/chat"
-import { readStreamableValue } from "@ai-sdk/rsc"
 
 export default function HomePage() {
   const [input, setInput] = useState("")
@@ -54,7 +52,7 @@ export default function HomePage() {
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center text-center px-4">
-      <h2 className="text-3xl text-white mb-8">What&apos;s on your mind today?</h2>
+      <h2 className="text-3xl text-foreground font-semibold mb-8">What&apos;s on your mind today?</h2>
       <InputArea
         input={input}
         setInput={setInput}

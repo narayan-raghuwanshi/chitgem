@@ -3,6 +3,7 @@ import { FC, HTMLAttributes, useMemo } from "react"
 import ReactMarkdown, { type Components } from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Message } from "@/types/message"
+import Image from "next/image"
 
 interface ChatMessageProps {
     message: Message
@@ -16,23 +17,41 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message, isLast }) => {
     const markdownContent = useMemo(() => content ?? "", [content])
 
     return (
-        <div className={`flex mx-4 sm:mx-8 md:mx-64 ${isAssistant ? "justify-start" : "justify-end"}`}>
+        <div className={`flex mx-4 sm:mx-8 md:mx-64 ${isAssistant ? "justify-start" : "justify-end"} animate-in fade-in slide-in-from-bottom-2 duration-500`}>
             <div
-                className={`max-w-2xl py-3 px-4 my-2 rounded-2xl text-justify flex items-start gap-x-3 ${isAssistant ? "" : "bg-zinc-800"
+                className={`max-w-2xl py-4 px-5 my-2 rounded-2xl flex flex-col gap-y-2 shadow-sm transition-all border ${isAssistant
+                    ? "bg-white/50 backdrop-blur-sm border-secondary/40 text-foreground"
+                    : "bg-primary text-primary-foreground border-transparent shadow-md"
                     }`}
             >
-                <div className="flex-grow text-zinc-100 message-text">
+                {isAssistant && (
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center">
+                            <span className="text-[10px] font-bold text-secondary-foreground">
+                                <Image src="/logo.png" alt="Logo" width={20} height={20} />
+                            </span>
+                        </div>
+                        <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground/80">Assistant</span>
+                    </div>
+                )}
+                <div className={`flex-grow message-text leading-relaxed ${isAssistant ? "text-foreground/90" : "text-primary-foreground"}`}>
                     {markdownContent ? (
                         <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
-                            className="prose prose-invert prose-sm sm:prose-base max-w-none"
+                            className={`prose prose-sm sm:prose-base max-w-none ${isAssistant ? "prose-zinc" : "prose-invert"}`}
                             components={markdownComponents}
                         >
                             {markdownContent}
                         </ReactMarkdown>
                     ) : (
                         isAssistant &&
-                        isLast && <span className="animate-pulse text-zinc-400 tracking-widest">...</span>
+                        isLast && (
+                            <div className="flex gap-1.5 items-center py-2">
+                                <div className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                <div className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                <div className="w-1.5 h-1.5 bg-muted-foreground/40 rounded-full animate-bounce"></div>
+                            </div>
+                        )
                     )}
                 </div>
             </div>
@@ -49,7 +68,7 @@ const CodeRenderer = ({ inline, className, children, ...props }: MarkdownCodePro
         {...props}
         className={
             inline
-                ? "px-1.5 py-0.5 rounded bg-zinc-800/80 text-[0.9em]"
+                ? "px-1.5 py-0.5 rounded bg-black/5 text-[0.9em] font-mono"
                 : className
         }
     >
@@ -58,24 +77,24 @@ const CodeRenderer = ({ inline, className, children, ...props }: MarkdownCodePro
 )
 
 const markdownComponents: Components = {
-    pre: ({ node, ...props }) => (
+    pre: ({ node: _node, ...props }) => (
         <pre
             {...props}
-            className="overflow-x-auto bg-zinc-900/70 border border-zinc-800 rounded-lg p-3 text-sm"
+            className="overflow-x-auto bg-black/5 border border-black/10 rounded-xl p-4 text-sm font-mono my-4 shadow-inner"
         />
     ),
     code: CodeRenderer,
-    ul: ({ node, ...props }) => <ul {...props} className="list-disc ml-5 space-y-1" />,
-    ol: ({ node, ...props }) => <ol {...props} className="list-decimal ml-5 space-y-1" />,
-    table: ({ node, ...props }) => (
-        <div className="overflow-x-auto">
-            <table {...props} className="min-w-full border border-zinc-700 text-sm" />
+    ul: ({ node: _node, ...props }) => <ul {...props} className="list-disc ml-5 space-y-2 my-2" />,
+    ol: ({ node: _node, ...props }) => <ol {...props} className="list-decimal ml-5 space-y-2 my-2" />,
+    table: ({ node: _node, ...props }) => (
+        <div className="overflow-x-auto my-4">
+            <table {...props} className="min-w-full border border-black/10 text-sm rounded-lg overflow-hidden" />
         </div>
     ),
-    th: ({ node, ...props }) => (
-        <th {...props} className="border border-zinc-700 px-3 py-2 bg-zinc-800" />
+    th: ({ node: _node, ...props }) => (
+        <th {...props} className="border-b border-black/10 px-4 py-2 bg-black/5 font-bold text-left" />
     ),
-    td: ({ node, ...props }) => (
-        <td {...props} className="border border-zinc-700 px-3 py-2" />
+    td: ({ node: _node, ...props }) => (
+        <td {...props} className="border-b border-black/5 px-4 py-2" />
     ),
 }
