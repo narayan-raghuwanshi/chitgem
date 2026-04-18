@@ -7,6 +7,7 @@ export interface IMessage {
 
 export interface IChat {
   title: string;
+  userId: string;
   messages: IMessage[];
   createdAt: Date;
   updatedAt: Date;
@@ -20,6 +21,7 @@ const MessageSchema = new Schema<IMessage>({
 const ChatSchema = new Schema<IChat>(
   {
     title: { type: String, required: true },
+    userId: { type: String, required: true },
     messages: { type: [MessageSchema], default: [] },
   },
   { timestamps: true }

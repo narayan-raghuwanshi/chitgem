@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/lib/mongodb";
 import { Chat } from "@/models/Chat";
+import { auth } from "@clerk/nextjs/server";
 
 type Params = {
   params: Promise<{
@@ -10,6 +11,11 @@ type Params = {
 
 export async function PATCH(req: NextRequest, { params }: Params) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     await connectToDB();
     const { chatId } = await params;
     const { title } = await req.json();
@@ -21,8 +27,8 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       );
     }
 
-    const updatedChat = await Chat.findByIdAndUpdate(
-      chatId,
+    const updatedChat = await Chat.findOneAndUpdate(
+      { _id: chatId, userId },
       { title: title.trim(), updatedAt: new Date() },
       { new: true }
     );
@@ -43,10 +49,15 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
 export async function DELETE(_req: NextRequest, { params }: Params) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     await connectToDB();
     const { chatId } = await params;
 
-    const deletedChat = await Chat.findByIdAndDelete(chatId);
+    const deletedChat = await Chat.findOneAndDelete({ _id: chatId, userId });
     if (!deletedChat) {
       return NextResponse.json({ error: "Chat not found" }, { status: 404 });
     }
