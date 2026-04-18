@@ -1,15 +1,27 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { Suspense, useEffect, useState, useRef } from "react"
 import { ChatMessage } from "@/components/chat/ChatMessage"
 import { InputArea } from "@/components/chat/InputArea"
 import { Message } from "@/types/message"
 import { chat } from "@/actions/chat"
 import { readStreamableValue } from "@ai-sdk/rsc"
-import { useParams } from "next/navigation"
+import { useParams, useSearchParams, useRouter } from "next/navigation"
 
 export default function ChatPage() {
+    return (
+        <Suspense fallback={<div className="flex-1 flex justify-center items-center text-white">Loading chat...</div>}>
+            <ChatContent />
+        </Suspense>
+    )
+}
+
+function ChatContent() {
     const { chatId } = useParams<{ chatId: string }>()
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const init = searchParams.get("init")
+    const hasTriggeredRef = useRef(false)
     const [messages, setMessages] = useState<Message[]>([])
     const [input, setInput] = useState("")
     const [isWaitingForResponse, setIsWaitingForResponse] = useState(false)
@@ -22,7 +34,20 @@ export default function ChatPage() {
     useEffect(() => {
         fetch(`/api/chats/${chatId}/messages`)
             .then((res) => res.json())
-            .then((msgs: Message[]) => setMessages(msgs))
+            .then((msgs: Message[]) => {
+                setMessages(msgs)
+                
+                if (init === "true" && msgs.length > 0 && msgs[msgs.length - 1].role === "user" && !hasTriggeredRef.current) {
+                    hasTriggeredRef.current = true
+                    router.replace(`/chat/${chatId}`)
+                    
+                    // We let the setMessages flush first, then generate
+                    setTimeout(() => {
+                        generateAiResponse(msgs)
+                    }, 0)
+                }
+            })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chatId])
 
     useEffect(() => {
@@ -65,22 +90,9 @@ export default function ChatPage() {
         }
     }
 
-    const handleSend = async () => {
-        if (!input.trim() || isWaitingForResponse) return
+    const generateAiResponse = async (history: Message[]) => {
         setIsWaitingForResponse(true)
-
-        const userMessage: Message = { role: "user", content: input.trim() }
-        setInput("")
-        setMessages((prev) => [...prev, userMessage])
-
         try {
-            await fetch(`/api/chats/${chatId}/messages`, {
-                method: "POST",
-                body: JSON.stringify(userMessage),
-                headers: { "Content-Type": "application/json" },
-            })
-
-            const history = [...messagesRef.current, userMessage]
             const { newMessage } = await chat(history)
             let textContent = ""
             const assistantMessage: Message = { role: "assistant", content: "" }
@@ -104,7 +116,35 @@ export default function ChatPage() {
                     headers: { "Content-Type": "application/json" },
                 })
             }
+        } catch (err) {
+            console.error("AI Generation Error:", err)
         } finally {
+            setIsWaitingForResponse(false)
+        }
+    }
+
+    const handleSend = async () => {
+        if (!input.trim() || isWaitingForResponse) return
+        
+        // Optimistically add user message
+        const userMessage: Message = { role: "user", content: input.trim() }
+        setInput("")
+        setMessages((prev) => [...prev, userMessage])
+        
+        setIsWaitingForResponse(true)
+
+        try {
+            // Save user message
+            await fetch(`/api/chats/${chatId}/messages`, {
+                method: "POST",
+                body: JSON.stringify(userMessage),
+                headers: { "Content-Type": "application/json" },
+            })
+
+            const history = [...messagesRef.current, userMessage]
+            await generateAiResponse(history)
+        } catch (err) {
+            console.error("Failed to send message:", err)
             setIsWaitingForResponse(false)
         }
     }

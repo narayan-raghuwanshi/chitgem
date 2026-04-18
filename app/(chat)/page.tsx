@@ -21,7 +21,7 @@ export default function HomePage() {
       // 1. Create a new chat
       const res = await fetch("/api/chats", {
         method: "POST",
-        body: JSON.stringify({ title: `New Chat` }),
+        body: JSON.stringify({ title: input.trim().slice(0, 30) || "New Chat" }),
         headers: { "Content-Type": "application/json" },
       })
       const newChat = await res.json()
@@ -35,31 +35,12 @@ export default function HomePage() {
         headers: { "Content-Type": "application/json" },
       })
 
-      // 3. Call AI with first message
-      const { newMessage } = await chat([userMessage])
-      let textContent = ""
-      const assistantMessage: Message = { role: "assistant", content: "" }
-
-      for await (const chunk of readStreamableValue(newMessage)) {
-        textContent += chunk ?? ""
-        assistantMessage.content = textContent
-      }
-
-      if (textContent.trim() !== "") {
-        // 4. Save assistant message
-        await fetch(`/api/chats/${chatId}/messages`, {
-          method: "POST",
-          body: JSON.stringify(assistantMessage),
-          headers: { "Content-Type": "application/json" },
-        })
-      }
-
-      // 5. Redirect to new chat page
-      router.push(`/chat/${chatId}`)
+      // 3. Redirect to new chat page with init param
+      router.push(`/chat/${chatId}?init=true`)
     } catch (err) {
       console.error("Failed to create chat:", err)
-    } finally {
       setIsWaitingForResponse(false)
+    } finally {
       setInput("")
     }
   }
