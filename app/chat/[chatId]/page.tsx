@@ -97,11 +97,13 @@ export default function ChatPage() {
                 content: textContent,
             }
 
-            await fetch(`/api/chats/${chatId}/messages`, {
-                method: "POST",
-                body: JSON.stringify(savedAssistantMessage),
-                headers: { "Content-Type": "application/json" },
-            })
+            if (textContent.trim() !== "") {
+                await fetch(`/api/chats/${chatId}/messages`, {
+                    method: "POST",
+                    body: JSON.stringify(savedAssistantMessage),
+                    headers: { "Content-Type": "application/json" },
+                })
+            }
         } finally {
             setIsWaitingForResponse(false)
         }

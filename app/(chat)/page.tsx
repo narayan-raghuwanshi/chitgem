@@ -41,16 +41,18 @@ export default function HomePage() {
       const assistantMessage: Message = { role: "assistant", content: "" }
 
       for await (const chunk of readStreamableValue(newMessage)) {
-        textContent += chunk
+        textContent += chunk ?? ""
         assistantMessage.content = textContent
       }
 
-      // 4. Save assistant message
-      await fetch(`/api/chats/${chatId}/messages`, {
-        method: "POST",
-        body: JSON.stringify(assistantMessage),
-        headers: { "Content-Type": "application/json" },
-      })
+      if (textContent.trim() !== "") {
+        // 4. Save assistant message
+        await fetch(`/api/chats/${chatId}/messages`, {
+          method: "POST",
+          body: JSON.stringify(assistantMessage),
+          headers: { "Content-Type": "application/json" },
+        })
+      }
 
       // 5. Redirect to new chat page
       router.push(`/chat/${chatId}`)

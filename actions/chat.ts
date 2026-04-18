@@ -8,15 +8,20 @@ export const chat = async (history: Message[]) => {
   const stream = createStreamableValue();
 
   (async () => {
-    const { textStream } = streamText({
-      model: gemini("gemini-2.0-flash"),
-      messages: history,
-    });
+    try {
+      const { textStream } = streamText({
+        model: gemini("gemini-2.5-flash"),
+        messages: history,
+      });
 
-    for await (const chunk of textStream) {
-      stream.update(chunk);
+      for await (const chunk of textStream) {
+        stream.update(chunk);
+      }
+      stream.done();
+    } catch (error) {
+      console.error("Error in chat AI stream:", error);
+      stream.error(error);
     }
-    stream.done();
   })();
 
   return {
