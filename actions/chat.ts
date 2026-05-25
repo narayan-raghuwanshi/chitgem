@@ -10,7 +10,7 @@ export const chat = async (history: Message[]) => {
   (async () => {
     try {
       const { textStream } = streamText({
-        model: gemini("gemini-3.1-pro-preview"),
+        model: gemini("gemini-3-flash-preview"),
         system: `Your name is Stroke. You are a professional, high-end Color & Aesthetic Consultant for the platform stroke.slashme.io.
         
         STRICT RULES:
